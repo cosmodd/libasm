@@ -5,3 +5,4 @@
 # Build
 *.o
 *.out
+*.a

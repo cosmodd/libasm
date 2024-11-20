@@ -17,13 +17,13 @@ ft_strdup:
 	pop rdi			; restore string address
 
 	; malloc a new string
-	push rdi		; save string address
-	mov rdi, rcx	; move length (rcx) to first arg (rdi)
-	call malloc		; call malloc
-	pop rdi			; restore string address
-	cmp rax, 0		; compare returned address to NULL
-	je _null		; return null if malloc failed
-	mov rsi, rax	; copy returned address for string copy
+	push rdi				; save string address
+	mov rdi, rcx			; move length (rcx) to first arg (rdi)
+	call malloc wrt ..plt	; call malloc with `wrt ..plt` to get the address of malloc in the PLT
+	pop rdi					; restore string address
+	cmp rax, 0				; compare returned address to NULL
+	je _null				; return null if malloc failed
+	mov rsi, rax			; copy returned address for string copy
 
 _copy:
 	mov dl, byte [rdi]	; copy char from *src to `dl`

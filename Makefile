@@ -10,13 +10,14 @@ CC_SRCS :=	./src/main.c
 ASM_OBJS :=	$(ASM_SRCS:.s=.o)
 CC_OBJS :=	$(CC_SRCS:.c=.o)
 
-CC_OPTIONS := -no-pie
+CC_OPTIONS := -I./includes
 ASM_OPTIONS := -f elf64
 
 ASM := nasm
 CC := gcc
 
-NAME := libasm.out
+NAME := libasm.a
+EXEC := libasm.out
 
 %.o: %.s
 	$(ASM) $(ASM_OPTIONS) -o $@ $<
@@ -27,20 +28,20 @@ NAME := libasm.out
 all: $(NAME)
 
 $(NAME): $(ASM_OBJS) $(CC_OBJS)
-	$(CC) $(CC_OPTIONS) -o $@ $^
-
-debug: CC_OPTIONS += -g -O0
-debug: ASM_OPTIONS += -g
-debug: re
+	ar rcs $(NAME) $(ASM_OBJS)
 
 run: $(NAME)
-	./$(NAME)
+	$(CC) $(CC_OPTIONS) $(CC_SRCS) $(NAME) -o $(EXEC)
+	./$(EXEC)
 
 clean:
-	rm -f $(NAME)
 	rm -f $(ASM_OBJS)
 	rm -f $(CC_OBJS)
 
-re: clean all
+fclean: clean
+	rm -f $(NAME)
+	rm -f $(EXEC)
 
-.PHONY: all clean re run
+re: fclean all
+
+.PHONY: all fclean clean re run
