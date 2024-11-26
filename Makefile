@@ -27,10 +27,10 @@ EXEC := libasm.out
 
 all: $(NAME)
 
-$(NAME): $(ASM_OBJS) $(CC_OBJS)
+$(NAME): $(ASM_OBJS)
 	ar rcs $(NAME) $(ASM_OBJS)
 
-run: $(NAME)
+run: $(NAME) $(CC_OBJS)
 	$(CC) $(CC_OPTIONS) $(CC_SRCS) $(NAME) -o $(EXEC)
 	./$(EXEC)
 
